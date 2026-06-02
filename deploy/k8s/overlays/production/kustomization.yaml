@@ -7,6 +7,8 @@ resources:
 
 # Map the placeholder image names to the real private registry + pinned tags.
 # Build the two targets (app + migrator) from the same repo — see deploy/k8s/README.md.
+# Replace `registry.example.internal` with your on-prem registry host; it MUST match
+# regcred's --docker-server (else image pull fails). Set newTag to the built git sha.
 images:
   - name: payload-blog-app
     newName: registry.example.internal/payload-blog

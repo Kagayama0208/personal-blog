@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react'
 import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
+import { SITE_NAME } from '@/utilities/siteMetadata'
 import { cn } from '@/utilities/ui'
 import { HeaderNav } from './Nav'
 
@@ -49,8 +50,15 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       {...(theme ? { 'data-theme': theme } : {})}
     >
       <div className="container flex items-center justify-between py-4">
-        <Link href="/">
-          <Logo loading="eager" priority="high" />
+        <Link aria-label={SITE_NAME} className="inline-flex items-center" href="/">
+          {/* デスクトップ: 横書きロゴ */}
+          <span className="hidden md:inline-flex">
+            <Logo loading="eager" priority="high" />
+          </span>
+          {/* モバイル: ブログ名を縦書き表示 */}
+          <span className="text-lg font-semibold tracking-wider text-current [writing-mode:vertical-rl] md:hidden">
+            {SITE_NAME}
+          </span>
         </Link>
         <HeaderNav data={data} />
       </div>

@@ -27,7 +27,7 @@ deploy/k8s/
 
 ## 1. イメージのビルド & push
 
-ドメインはビルド時に焼き込まれるため `--build-arg` 必須。アプリ用と migrate 用の2タグを作る。
+ドメイン・Plausible はビルド時に焼き込まれるため `--build-arg` 必須（configmap と同値にする）。アプリ用と migrate 用の2タグを作る。
 
 ```bash
 SHA=$(git rev-parse --short HEAD)
@@ -36,11 +36,13 @@ REG=registry.example.internal/payload-blog
 # アプリ（standalone runner）
 docker build \
   --build-arg NEXT_PUBLIC_SERVER_URL=https://kousuke.dev \
+  --build-arg PLAUSIBLE_DOMAIN=kousuke.dev \
   -t $REG:$SHA .
 
 # migrate（payload CLI + full node_modules を持つ migrator ステージ）
 docker build --target migrator \
   --build-arg NEXT_PUBLIC_SERVER_URL=https://kousuke.dev \
+  --build-arg PLAUSIBLE_DOMAIN=kousuke.dev \
   -t $REG:$SHA-migrate .
 
 docker push $REG:$SHA
@@ -110,5 +112,5 @@ kubectl run curl --rm -it --image=curlimages/curl -- \
 
 ## メモ
 
-- `NEXT_PUBLIC_SERVER_URL` は **ビルド arg と configmap で必ず同値**（不一致だと画像最適化 400 や CORS/SEO 不整合）
+- `NEXT_PUBLIC_SERVER_URL` と `PLAUSIBLE_DOMAIN` は **ビルド arg と configmap で必ず同値**（不一致だと画像最適化 400 / CORS/SEO 不整合、Plausible タグが静的ページに乗らない）
 - ステージング等でドメインが変わる場合は **別 image** をビルドし、別 overlay で参照する

@@ -31,6 +31,15 @@ COPY . .
 ARG NEXT_PUBLIC_SERVER_URL
 ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
 
+# Plausible analytics. SSG/ISR pages bake <head> at build time, so the domain
+# must be present BEFORE `build` (same constraint as NEXT_PUBLIC_SERVER_URL).
+# Pass it per-environment: `docker build --build-arg PLAUSIBLE_DOMAIN=kousuke.dev`.
+# Keep it identical to the configmap value. Self-host only: also set PLAUSIBLE_SRC.
+ARG PLAUSIBLE_DOMAIN
+ENV PLAUSIBLE_DOMAIN=${PLAUSIBLE_DOMAIN}
+ARG PLAUSIBLE_SRC
+ENV PLAUSIBLE_SRC=${PLAUSIBLE_SRC}
+
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.

@@ -19,7 +19,7 @@ type SearchResult = {
  * the current page. Selecting a result opens the post; "Search for …"/Enter falls
  * back to the full /search results page.
  */
-export const HeaderSearch: React.FC = () => {
+export const HeaderSearch: React.FC<{ fullWidth?: boolean }> = ({ fullWidth = false }) => {
   const router = useRouter()
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -109,7 +109,7 @@ export const HeaderSearch: React.FC = () => {
   const showDropdown = open && Boolean(query)
 
   return (
-    <div className="relative" ref={containerRef}>
+    <div className={cn('relative', fullWidth && 'w-full')} ref={containerRef}>
       <div className="relative">
         <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <input
@@ -121,7 +121,10 @@ export const HeaderSearch: React.FC = () => {
           aria-expanded={showDropdown}
           aria-label="Search"
           autoComplete="off"
-          className="h-9 w-40 rounded-md border border-border bg-transparent pl-8 pr-3 text-sm outline-none transition-[width,box-shadow] placeholder:text-muted-foreground focus-visible:w-56 focus-visible:ring-4 focus-visible:ring-ring/20"
+          className={cn(
+            'h-9 rounded-md border border-border bg-transparent pl-8 pr-3 text-sm outline-none transition-[width,box-shadow] placeholder:text-muted-foreground focus-visible:ring-4 focus-visible:ring-ring/20',
+            fullWidth ? 'w-full' : 'w-40 focus-visible:w-56',
+          )}
           onChange={(event) => {
             setValue(event.target.value)
             setOpen(true)
@@ -138,7 +141,10 @@ export const HeaderSearch: React.FC = () => {
 
       {showDropdown && (
         <div
-          className="absolute right-0 z-50 mt-2 w-80 max-w-[90vw] overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-lg"
+          className={cn(
+            'absolute z-50 mt-2 overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-lg',
+            fullWidth ? 'inset-x-0' : 'right-0 w-80 max-w-[90vw]',
+          )}
           id={listboxId}
           role="listbox"
         >

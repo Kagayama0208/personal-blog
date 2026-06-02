@@ -20,6 +20,7 @@ public/media
 test-results
 playwright-report
 coverage
+deploy/
 
 # Logs & OS cruft
 **/*.log
