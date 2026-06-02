@@ -1,29 +1,27 @@
 import clsx from 'clsx'
 import React from 'react'
 
+import { SITE_NAME } from '@/utilities/siteMetadata'
+
 interface Props {
   className?: string
   loading?: 'lazy' | 'eager'
   priority?: 'auto' | 'high' | 'low'
 }
 
+// プレースホルダーのテキストロゴ。テーマ色を継承し外部依存もない。
+// 画像ロゴに差し替える場合は public/ に配置し、下記を <img src="/logo.svg" ... /> へ変更する。
 export const Logo = (props: Props) => {
-  const { loading: loadingFromProps, priority: priorityFromProps, className } = props
-
-  const loading = loadingFromProps || 'lazy'
-  const priority = priorityFromProps || 'low'
+  const { className } = props
 
   return (
-    /* eslint-disable @next/next/no-img-element */
-    <img
-      alt="Payload Logo"
-      width={193}
-      height={34}
-      loading={loading}
-      fetchPriority={priority}
-      decoding="async"
-      className={clsx('max-w-[9.375rem] w-full h-[34px]', className)}
-      src="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-logo-light.svg"
-    />
+    <span
+      className={clsx(
+        'inline-flex items-center h-8.5 text-xl font-semibold tracking-tight text-current',
+        className,
+      )}
+    >
+      {SITE_NAME}
+    </span>
   )
 }

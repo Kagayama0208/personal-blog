@@ -5,6 +5,6 @@ kind: ConfigMap
 metadata:
   name: payload-blog-env
 data:
-  NEXT_PUBLIC_SERVER_URL: 'https://blog.example.com'
+  NEXT_PUBLIC_SERVER_URL: 'https://kousuke.dev'
   S3_BUCKET: 'payload-media'
   S3_REGION: 'ap-northeast-1'

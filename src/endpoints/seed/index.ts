@@ -103,8 +103,10 @@ export const seed = async ({
       collection: 'users',
       data: {
         name: 'Demo Author',
+        // 開発用シードのデモ作成者。ログイン用途ではなく投稿の著者表示のためだけに作る。
+        // パスワードは環境変数で上書き可能（seed は本番では実行されない）。
         email: 'demo-author@example.com',
-        password: 'password',
+        password: process.env.SEED_AUTHOR_PASSWORD || `seed-${Math.random().toString(36).slice(2)}`,
       },
     }),
     payload.create({
@@ -246,13 +248,6 @@ export const seed = async ({
       slug: 'footer',
       data: {
         navItems: [
-          {
-            link: {
-              type: 'custom',
-              label: 'Admin',
-              url: '/admin',
-            },
-          },
           {
             link: {
               type: 'custom',

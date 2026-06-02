@@ -1,8 +1,13 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
 
-// Used for pre-seeded content so that the homepage is not empty
-export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
-  slug: 'home',
+import { SITE_DESCRIPTION } from '@/utilities/siteMetadata'
+
+const ABOUT_TITLE = 'このブログについて'
+
+// `/about` の静的フォールバック。管理画面で slug='about' のページを作成すれば上書きされる。
+// （以前ホームに表示していた説明文をこのページへ移動したもの）
+export const aboutStatic: RequiredDataFromCollectionSlug<'pages'> = {
+  slug: 'about',
   _status: 'published',
   hero: {
     type: 'lowImpact',
@@ -19,7 +24,7 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Payload Website Template',
+                text: ABOUT_TITLE,
                 version: 1,
               },
             ],
@@ -33,35 +38,12 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
             type: 'paragraph',
             children: [
               {
-                type: 'link',
-                children: [
-                  {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: 'Visit the admin dashboard',
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                fields: {
-                  linkType: 'custom',
-                  newTab: false,
-                  url: '/admin',
-                },
-                format: '',
-                indent: 0,
-                version: 2,
-              },
-              {
                 type: 'text',
                 detail: 0,
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: ' to make your account and seed content for your website.',
+                text: SITE_DESCRIPTION,
                 version: 1,
               },
             ],
@@ -80,9 +62,9 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
     },
   },
   meta: {
-    description: 'An open-source website built with Payload and Next.js.',
-    title: 'Payload Website Template',
+    description: SITE_DESCRIPTION,
+    title: ABOUT_TITLE,
   },
-  title: 'Home',
+  title: ABOUT_TITLE,
   layout: [],
 }

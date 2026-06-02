@@ -3,6 +3,10 @@
 import config from '@payload-config'
 import { GRAPHQL_POST, REST_OPTIONS } from '@payloadcms/next/routes'
 
-export const POST = GRAPHQL_POST(config)
+// 本番では GraphQL API を無効化する（フロントは未使用）。
+export const POST =
+  process.env.NODE_ENV === 'production'
+    ? () => new Response('Not Found', { status: 404 })
+    : GRAPHQL_POST(config)
 
 export const OPTIONS = REST_OPTIONS(config)

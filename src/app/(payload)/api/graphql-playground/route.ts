@@ -4,4 +4,9 @@ import config from '@payload-config'
 import '@payloadcms/next/css'
 import { GRAPHQL_PLAYGROUND_GET } from '@payloadcms/next/routes'
 
-export const GET = GRAPHQL_PLAYGROUND_GET(config)
+// 本番では GraphQL Playground を無効化する（スキーマ流出面を塞ぐ）。
+// フロントは GraphQL を使わずローカルAPIで動作するため影響なし。
+export const GET =
+  process.env.NODE_ENV === 'production'
+    ? () => new Response('Not Found', { status: 404 })
+    : GRAPHQL_PLAYGROUND_GET(config)

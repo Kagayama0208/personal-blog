@@ -10,6 +10,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
 import { notFound } from 'next/navigation'
+import { SITE_NAME } from '@/utilities/siteMetadata'
 
 export const revalidate = 600
 
@@ -45,6 +46,7 @@ export default async function Page({ params: paramsPromise, searchParams: search
       categories: true,
       tags: true,
       meta: true,
+      publishedAt: true,
     },
   })
 
@@ -85,7 +87,7 @@ export default async function Page({ params: paramsPromise, searchParams: search
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { pageNumber } = await paramsPromise
   return {
-    title: `Payload Website Template Posts Page ${pageNumber || ''}`,
+    title: `${SITE_NAME} Posts Page ${pageNumber || ''}`,
   }
 }
 

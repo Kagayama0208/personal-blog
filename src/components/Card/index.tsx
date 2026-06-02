@@ -7,8 +7,13 @@ import React, { Fragment } from 'react'
 import type { Post } from '@/payload-types'
 
 import { Media } from '@/components/Media'
+import { MediaPlaceholder } from '@/components/Media/MediaPlaceholder'
+import { formatDateTime } from '@/utilities/formatDateTime'
 
-export type CardPostData = Pick<Post, 'slug' | 'categories' | 'tags' | 'meta' | 'title'>
+export type CardPostData = Pick<
+  Post,
+  'slug' | 'categories' | 'tags' | 'meta' | 'title' | 'publishedAt'
+>
 
 export const Card: React.FC<{
   alignItems?: 'center'
@@ -22,7 +27,7 @@ export const Card: React.FC<{
   const { card, link } = useClickableCard({})
   const { className, doc, relationTo, showCategories, showTags, title: titleFromProps } = props
 
-  const { slug, categories, tags, meta, title } = doc || {}
+  const { slug, categories, tags, meta, title, publishedAt } = doc || {}
   const { description, image: metaImage } = meta || {}
 
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
@@ -34,48 +39,66 @@ export const Card: React.FC<{
   return (
     <article
       className={cn(
-        'border border-border rounded-lg overflow-hidden bg-card hover:cursor-pointer',
+        'group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card',
+        'transition-[transform,box-shadow,border-color] duration-300',
+        'hover:-translate-y-1 hover:shadow-soft-lg hover:border-brand/30 dark:hover:border-brand/40',
         className,
       )}
       ref={card.ref}
     >
-      <div className="relative w-full ">
-        {!metaImage && <div className="">No image</div>}
-        {metaImage && typeof metaImage !== 'string' && <Media resource={metaImage} size="33vw" />}
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted">
+        {metaImage && typeof metaImage !== 'string' ? (
+          <Media
+            fill
+            imgClassName="object-cover transition-transform duration-500 group-hover:scale-105"
+            resource={metaImage}
+            size="33vw"
+          />
+        ) : (
+          <MediaPlaceholder title={titleToUse} />
+        )}
       </div>
-      <div className="p-4">
-        {showCategories && hasCategories && (
-          <div className="uppercase text-sm mb-4">
-            {categories?.map((category, index) => {
-              if (typeof category === 'object') {
-                const { title: titleFromCategory } = category
+      <div className="flex flex-1 flex-col p-5">
+        {(showCategories && hasCategories) || publishedAt ? (
+          <div className="mb-3 flex items-center gap-2 text-xs text-muted-foreground">
+            {showCategories && hasCategories && (
+              <span className="uppercase tracking-wide">
+                {categories?.map((category, index) => {
+                  if (typeof category === 'object') {
+                    const { title: titleFromCategory } = category
 
-                const categoryTitle = titleFromCategory || 'Untitled category'
+                    const categoryTitle = titleFromCategory || 'Untitled category'
 
-                const isLast = index === categories.length - 1
+                    const isLast = index === categories.length - 1
 
-                return (
-                  <Fragment key={index}>
-                    {categoryTitle}
-                    {!isLast && <Fragment>, &nbsp;</Fragment>}
-                  </Fragment>
-                )
-              }
+                    return (
+                      <Fragment key={index}>
+                        {categoryTitle}
+                        {!isLast && <Fragment>, &nbsp;</Fragment>}
+                      </Fragment>
+                    )
+                  }
 
-              return null
-            })}
+                  return null
+                })}
+              </span>
+            )}
+            {showCategories && hasCategories && publishedAt && <span aria-hidden="true">·</span>}
+            {publishedAt && <time dateTime={publishedAt}>{formatDateTime(publishedAt)}</time>}
           </div>
-        )}
+        ) : null}
         {titleToUse && (
-          <div className="prose">
-            <h3>
-              <Link className="not-prose" href={href} ref={link.ref}>
-                {titleToUse}
-              </Link>
-            </h3>
-          </div>
+          <h3 className="text-lg font-semibold leading-snug tracking-tight">
+            <Link className="transition-colors group-hover:text-brand" href={href} ref={link.ref}>
+              {titleToUse}
+            </Link>
+          </h3>
         )}
-        {description && <div className="mt-2">{description && <p>{sanitizedDescription}</p>}</div>}
+        {description && (
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-2">
+            {sanitizedDescription}
+          </p>
+        )}
         {showTags && hasTags && (
           <div className="mt-4 flex flex-wrap gap-2">
             {tags?.map((tag, index) => {
@@ -85,7 +108,7 @@ export const Card: React.FC<{
 
               return (
                 <Link
-                  className="text-xs rounded-full border border-border px-2 py-0.5 hover:bg-card"
+                  className="inline-flex items-center rounded-full border border-border px-2.5 py-0.5 text-xs text-muted-foreground transition-colors hover:border-brand hover:bg-brand-subtle hover:text-brand"
                   href={`/tags/${tag.slug}`}
                   key={index}
                 >

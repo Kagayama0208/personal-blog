@@ -27,7 +27,7 @@ COPY . .
 
 # Public site URL is baked at build time into image `remotePatterns`,
 # NEXT_PUBLIC_* client bundles and the next-sitemap output, so it must be set
-# BEFORE `build`. Pass it per-environment: `docker build --build-arg NEXT_PUBLIC_SERVER_URL=https://blog.example.com`.
+# BEFORE `build`. Pass it per-environment: `docker build --build-arg NEXT_PUBLIC_SERVER_URL=https://kousuke.dev`.
 ARG NEXT_PUBLIC_SERVER_URL
 ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
 

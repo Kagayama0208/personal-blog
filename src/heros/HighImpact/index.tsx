@@ -17,7 +17,9 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
 
   return (
     <div
-      className="relative -mt-[10.4rem] flex items-center justify-center text-white"
+      // -mt で画像をヘッダー下まで全面ブリードさせつつ、同値の pt でテキストだけを
+      // ヘッダーの下（本来の通常フロー位置）まで押し下げる。写真は重なってよいが文字は重ねない。
+      className="relative -mt-[10.4rem] pt-[10.4rem] flex items-center justify-center text-white"
       data-theme="dark"
     >
       <div className="container mb-8 z-10 relative flex items-center justify-center">

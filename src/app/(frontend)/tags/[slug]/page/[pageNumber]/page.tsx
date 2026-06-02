@@ -10,6 +10,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React, { cache } from 'react'
 import { notFound } from 'next/navigation'
+import { SITE_NAME } from '@/utilities/siteMetadata'
 import PageClient from '../../page.client'
 
 export const revalidate = 600
@@ -59,6 +60,7 @@ export default async function Page({
       categories: true,
       tags: true,
       meta: true,
+      publishedAt: true,
     },
   })
 
@@ -105,7 +107,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const tag = await queryTagBySlug({ slug: decodeURIComponent(slug) })
 
   return {
-    title: `Posts tagged “${tag?.title ?? slug}” Page ${pageNumber || ''} | Payload Website Template`,
+    title: `Posts tagged “${tag?.title ?? slug}” Page ${pageNumber || ''} | ${SITE_NAME}`,
   }
 }
 

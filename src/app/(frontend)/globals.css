@@ -36,6 +36,13 @@
 @source inline("bg-success/30");
 @source inline("border-warning");
 @source inline("bg-warning/30");
+@source inline("bg-brand");
+@source inline("text-brand");
+@source inline("border-brand");
+@source inline("bg-brand-subtle");
+@source inline("ring-brand");
+@source inline("shadow-soft");
+@source inline("shadow-soft-lg");
 
 @theme {
   --breakpoint-sm: 40rem;
@@ -44,7 +51,11 @@
   --breakpoint-xl: 80rem;
   --breakpoint-2xl: 86rem;
   --font-mono: var(--font-geist-mono);
-  --font-sans: var(--font-geist-sans);
+  --font-sans:
+    var(--font-geist-sans), 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP',
+    'Yu Gothic', 'YuGothic', Meiryo, sans-serif;
+  --shadow-soft: 0 1px 2px oklch(0% 0 0deg / 0.04), 0 4px 16px oklch(0% 0 0deg / 0.06);
+  --shadow-soft-lg: 0 4px 12px oklch(0% 0 0deg / 0.06), 0 12px 32px oklch(0% 0 0deg / 0.1);
 }
 
 @layer utilities {
@@ -105,7 +116,10 @@
   --destructive-foreground: oklch(57.7% 0.245 27.325deg);
   --border: oklch(92.2% 0 0deg);
   --input: oklch(92.2% 0 0deg);
-  --ring: oklch(70.8% 0 0deg);
+  --ring: oklch(54% 0.21 264deg);
+  --brand: oklch(54% 0.21 264deg);
+  --brand-foreground: oklch(98.5% 0 0deg);
+  --brand-subtle: oklch(96% 0.03 264deg);
   --chart-1: oklch(64.6% 0.222 41.116deg);
   --chart-2: oklch(60% 0.118 184.704deg);
   --chart-3: oklch(39.8% 0.07 227.392deg);
@@ -144,7 +158,10 @@
   --destructive-foreground: oklch(63.7% 0.237 25.331deg);
   --border: oklch(26.9% 0 0deg);
   --input: oklch(26.9% 0 0deg);
-  --ring: oklch(43.9% 0 0deg);
+  --ring: oklch(70% 0.16 264deg);
+  --brand: oklch(70% 0.16 264deg);
+  --brand-foreground: oklch(20.5% 0 0deg);
+  --brand-subtle: oklch(28% 0.05 264deg);
   --chart-1: oklch(48.8% 0.243 264.376deg);
   --chart-2: oklch(69.6% 0.17 162.48deg);
   --chart-3: oklch(76.9% 0.188 70.08deg);
@@ -183,6 +200,9 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-subtle: var(--brand-subtle);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -221,4 +241,15 @@ html {
 html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

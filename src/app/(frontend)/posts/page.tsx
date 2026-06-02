@@ -9,6 +9,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
+import { SITE_NAME } from '@/utilities/siteMetadata'
 
 // Reader-driven sorting reads `?sort=` at request time, so this route renders dynamically.
 export const revalidate = 600
@@ -36,6 +37,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       categories: true,
       tags: true,
       meta: true,
+      publishedAt: true,
     },
   })
 
@@ -75,6 +77,6 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Payload Website Template Posts`,
+    title: `${SITE_NAME} Posts`,
   }
 }

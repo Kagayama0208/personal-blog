@@ -35,12 +35,12 @@ REG=registry.example.internal/payload-blog
 
 # アプリ（standalone runner）
 docker build \
-  --build-arg NEXT_PUBLIC_SERVER_URL=https://blog.example.com \
+  --build-arg NEXT_PUBLIC_SERVER_URL=https://kousuke.dev \
   -t $REG:$SHA .
 
 # migrate（payload CLI + full node_modules を持つ migrator ステージ）
 docker build --target migrator \
-  --build-arg NEXT_PUBLIC_SERVER_URL=https://blog.example.com \
+  --build-arg NEXT_PUBLIC_SERVER_URL=https://kousuke.dev \
   -t $REG:$SHA-migrate .
 
 docker push $REG:$SHA
@@ -85,7 +85,7 @@ kubectl wait --for=condition=complete job/payload-migrate -n payload-blog --time
 kubectl apply -k overlays/production
 
 # 3-6. 共有トンネルにルート追加（Cloudflare Zero Trust ダッシュボード）:
-#      Public Hostname: blog.example.com
+#      Public Hostname: kousuke.dev
 #      Service:         http://payload-blog.payload-blog.svc.cluster.local:80
 #      → K8s 側の追加作業は不要（このプロジェクトは Service を出すだけ）
 ```
@@ -103,7 +103,7 @@ kubectl run curl --rm -it --image=curlimages/curl -- \
   curl -s http://payload-blog.payload-blog.svc.cluster.local/health   # {"status":"ok"}
 ```
 
-- `https://blog.example.com/health` が Cloudflare 経由で 200
+- `https://kousuke.dev/health` が Cloudflare 経由で 200
 - `/admin` で初回管理ユーザー作成 → ログイン
 - 画像アップロード → AWS S3 バケットに原本 + 7サイズ（thumbnail/square/small/medium/large/xlarge/og）
 - replicas:2 で連続リロードしても全 Pod で画像表示（= S3 共有）

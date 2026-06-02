@@ -1,12 +1,26 @@
 import canUseDOM from './canUseDOM'
 
+let warnedMissingServerURL = false
+
 export const getServerSideURL = () => {
-  return (
-    process.env.NEXT_PUBLIC_SERVER_URL ||
-    (process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : 'http://localhost:3000')
-  )
+  if (process.env.NEXT_PUBLIC_SERVER_URL) {
+    return process.env.NEXT_PUBLIC_SERVER_URL
+  }
+
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  }
+
+  // 本番で公開URLが未設定だと CORS / リンク / OG / sitemap が localhost にフォールバックする。
+  // 一度だけ警告して気付けるようにする（ビルド時のログを汚さないため抑制する）。
+  if (process.env.NODE_ENV === 'production' && !warnedMissingServerURL) {
+    warnedMissingServerURL = true
+    console.warn(
+      '[config] NEXT_PUBLIC_SERVER_URL is not set in production; falling back to http://localhost:3000',
+    )
+  }
+
+  return 'http://localhost:3000'
 }
 
 export const getClientSideURL = () => {

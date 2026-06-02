@@ -8,7 +8,7 @@ metadata:
   name: payload-blog-env
 data:
   NODE_ENV: 'production'
-  NEXT_PUBLIC_SERVER_URL: 'https://blog.example.com'
+  NEXT_PUBLIC_SERVER_URL: 'https://kousuke.dev'
   PORT: '3000'
   HOSTNAME: '0.0.0.0'
   # AWS S3 media storage (non-secret parts). Credentials live in the Secret.

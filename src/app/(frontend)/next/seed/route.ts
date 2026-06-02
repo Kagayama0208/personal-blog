@@ -6,6 +6,12 @@ import { headers } from 'next/headers'
 export const maxDuration = 60 // This function can run for a maximum of 60 seconds
 
 export async function POST(): Promise<Response> {
+  // seed は対象コレクションを全削除してから再投入するため、本番では無効化する
+  // （誤操作による本番データ消去を防ぐ）。初期コンテンツは管理画面で作成する。
+  if (process.env.NODE_ENV === 'production') {
+    return new Response('Not Found', { status: 404 })
+  }
+
   const payload = await getPayload({ config })
   const requestHeaders = await headers()
 
