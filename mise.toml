@@ -1,0 +1,24 @@
+# payload-blog のプロジェクトルートに置く。
+# 役割は「ツールのバージョン固定」と「開発タスクの束ね」。
+# DB は devcontainer の "db" サービスが常時提供するので、起動タスクは不要。
+# アプリ設定(DATABASE_URI / PAYLOAD_SECRET 等)は .env に置く。
+
+[tools]
+node = "22"
+pnpm = "10"            # Payload は ^9 || ^10 要求。latest(11)は不可なので固定
+
+[tasks.dev]
+description = "開発サーバ起動 (DB は devcontainer の db サービス)"
+run = "pnpm dev"
+
+[tasks.types]
+description = "Payload の型定義を再生成"
+run = "pnpm payload generate:types"
+
+[tasks.migrate-create]
+description = "マイグレーションを生成してコミット対象にする"
+run = "pnpm payload migrate:create"
+
+[tasks.migrate]
+description = "マイグレーションを適用"
+run = "pnpm payload migrate"

@@ -1,0 +1,36 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/base:ubuntu
+    command: sleep infinity
+    volumes:
+      - ..:/workspaces/payload-blog:cached
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - payload
+
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: payload
+      POSTGRES_PASSWORD: payload
+      POSTGRES_DB: payload
+    volumes:
+      - payload-pg-data:/var/lib/postgresql/data
+    # コンテナ内からは host = サービス名 "db" で接続:
+    #   DATABASE_URI=postgres://payload:payload@db:5432/payload
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U payload -d payload"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    networks:
+      - payload
+
+volumes:
+  payload-pg-data:
+
+networks:
+  payload:

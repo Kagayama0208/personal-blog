@@ -1,0 +1,25 @@
+# CloudNativePG Postgres cluster for the Payload blog.
+# Prereqs (one-time, cluster-wide): install the CNPG operator, then ensure the
+# `payload-blog` namespace exists (kubectl apply -k ../base creates it, or
+# `kubectl create namespace payload-blog`).
+#
+# CNPG auto-generates a Secret named `payload-pg-app` (type basic-auth) holding
+# username/password/host/port/dbname plus a ready-made `uri` key that the app and
+# the migrate Job project into DATABASE_URL.
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: payload-pg
+  namespace: payload-blog
+spec:
+  instances: 2 # 1 primary + 1 hot-standby replica (set to 1 for a minimal install)
+  imageName: ghcr.io/cloudnative-pg/postgresql:17 # matches the dev docker-compose postgres:17
+  storage:
+    size: 20Gi
+    # storageClass: <on-prem-sc>   # set to your cluster's StorageClass (e.g. local-path, ceph-rbd, nfs)
+  bootstrap:
+    initdb:
+      database: payload
+      owner: payload
+  # Optional: enable WAL + base backups to object storage (e.g. the same AWS S3
+  # bucket family used for media) via barmanObjectStore for disaster recovery.

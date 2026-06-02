@@ -1,0 +1,26 @@
+# Dependencies & build output (reinstalled/rebuilt inside the image)
+node_modules
+.next
+.pnpm-store
+
+# Secrets & local env — must NOT be baked into the image (would override K8s env)
+.env
+.env.*
+
+# VCS / editor / dev container
+.git
+.gitignore
+.devcontainer
+.vscode
+
+# Local media uploads (production uses S3)
+public/media
+
+# Tests & reports
+test-results
+playwright-report
+coverage
+
+# Logs & OS cruft
+**/*.log
+.DS_Store

@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: payload-blog
+
+resources:
+  - ../../base
+
+# Map the placeholder image names to the real private registry + pinned tags.
+# Build the two targets (app + migrator) from the same repo — see deploy/k8s/README.md.
+images:
+  - name: payload-blog-app
+    newName: registry.example.internal/payload-blog
+    newTag: REPLACE_WITH_GIT_SHA
+  - name: payload-blog-migrate
+    newName: registry.example.internal/payload-blog
+    newTag: REPLACE_WITH_GIT_SHA-migrate
+
+# Production-specific env (must match the image's build-arg NEXT_PUBLIC_SERVER_URL).
+patches:
+  - path: configmap-patch.yaml
+
+# Real Secrets are applied out-of-band (SealedSecrets / External Secrets);
+# secret.example.yaml documents the required keys and is intentionally NOT a resource.

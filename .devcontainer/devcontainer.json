@@ -1,0 +1,51 @@
+{
+  "name": "payload-blog",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/payload-blog",
+
+  // 入室時に app と db の両方を起動する(depends_on でも db は上がるが明示)
+  "runServices": ["app", "db"],
+
+  // ツール管理は mise に一本化。mise.toml(node/pnpm)が唯一の真実。
+  "features": {
+    "ghcr.io/devcontainers-extra/features/mise:1": {}
+  },
+
+  // mise が入れたツールをリビルドを跨いで永続化する
+  "mounts": ["source=mise-data-volume,target=/mnt/mise-data,type=volume"],
+  "containerEnv": {
+    "MISE_DATA_DIR": "/mnt/mise-data"
+  },
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:/mnt/mise-data/shims"
+  },
+
+  // 初回作成時: 所有権調整 → mise.toml を信頼 → ツール導入 → 依存解決
+  "postCreateCommand": "sudo chown -R vscode:vscode /mnt/mise-data && mise trust && mise install && mise exec -- pnpm install",
+
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": { "label": "Payload / Next.js", "onAutoForward": "notify" }
+  },
+
+  "customizations": {
+    "vscode": {
+      // 統合ターミナルを bash 固定にする
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": { "path": "/bin/bash" }
+        }
+      },
+      "extensions": [
+        "hverlin.mise-vscode",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss"
+      ]
+    }
+  },
+
+  "remoteUser": "vscode"
+}
